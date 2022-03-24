@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/pages/contacts_page.dart';
 import 'package:flutter_chat_app/pages/message_page.dart';
 import 'package:flutter_chat_app/pages/notifications_page.dart';
 import 'package:flutter_chat_app/theme.dart';
+import 'package:flutter_chat_app/widgets/glowing_action_button.dart';
 
 import '../widgets/widgets.dart';
 
@@ -38,6 +39,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: ValueListenableBuilder(
@@ -105,41 +107,57 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _NavigationBarItem(
-            index: 0,
-            label: 'Messages',
-            icon: CupertinoIcons.bubble_left_bubble_right_fill,
-            isSelected: (selectedIndex == 0),
-            onTap: handleItemSelected,
+    final brightness = Theme.of(context).brightness;
+    return Card(
+      color: (brightness == Brightness.light) ? Colors.transparent : null,
+      elevation: 0,
+      margin: const EdgeInsets.all(0),
+      child: SafeArea(
+        top: false,
+        bottom: true,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _NavigationBarItem(
+                index: 0,
+                label: 'Messages',
+                icon: CupertinoIcons.bubble_left_bubble_right_fill,
+                isSelected: (selectedIndex == 0),
+                onTap: handleItemSelected,
+              ),
+              _NavigationBarItem(
+                index: 1,
+                label: 'Notifications',
+                icon: CupertinoIcons.bell_solid,
+                isSelected: (selectedIndex == 1),
+                onTap: handleItemSelected,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: GlowingActionButton(
+                    color: AppColors.secondary,
+                    icon: CupertinoIcons.add,
+                    onPress: () {}),
+              ),
+              _NavigationBarItem(
+                index: 2,
+                label: 'Calls',
+                icon: CupertinoIcons.phone_fill,
+                isSelected: (selectedIndex == 2),
+                onTap: handleItemSelected,
+              ),
+              _NavigationBarItem(
+                index: 3,
+                label: 'Contacts',
+                icon: CupertinoIcons.person_2_fill,
+                isSelected: (selectedIndex == 3),
+                onTap: handleItemSelected,
+              ),
+            ],
           ),
-          _NavigationBarItem(
-            index: 1,
-            label: 'Notifications',
-            icon: CupertinoIcons.bell_solid,
-            isSelected: (selectedIndex == 1),
-            onTap: handleItemSelected,
-          ),
-          _NavigationBarItem(
-            index: 2,
-            label: 'Calls',
-            icon: CupertinoIcons.phone_fill,
-            isSelected: (selectedIndex == 2),
-            onTap: handleItemSelected,
-          ),
-          _NavigationBarItem(
-            index: 3,
-            label: 'Contacts',
-            icon: CupertinoIcons.person_2_fill,
-            isSelected: (selectedIndex == 3),
-            onTap: handleItemSelected,
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -178,7 +196,9 @@ class _NavigationBarItem extends StatelessWidget {
               size: 20,
               color: isSelected ? AppColors.secondary : null,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(
+              height: 8,
+            ),
             Text(
               label,
               style: isSelected
