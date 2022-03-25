@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../theme.dart';
 
 class IconBackground extends StatelessWidget {
@@ -15,7 +14,6 @@ class IconBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      // color: Colors.red,
       color: Theme.of(context).cardColor,
       borderRadius: BorderRadius.circular(6),
       child: InkWell(
@@ -26,7 +24,7 @@ class IconBackground extends StatelessWidget {
           padding: const EdgeInsets.all(6),
           child: Icon(
             icon,
-            size: 18,
+            size: 22,
           ),
         ),
       ),
@@ -52,16 +50,17 @@ class IconBorder extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-              width: 2,
-              color: Theme.of(context).cardColor,
-            )),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(
+            width: 2,
+            color: Theme.of(context).cardColor,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(4),
           child: Icon(
             icon,
-            size: 16,
+            size: 22,
           ),
         ),
       ),

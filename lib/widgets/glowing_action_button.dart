@@ -7,17 +7,16 @@ class GlowingActionButton extends StatelessWidget {
     required this.color,
     required this.icon,
     this.size = 54,
-    required this.onPress,
+    required this.onPressed,
   }) : super(key: key);
 
   final Color color;
   final IconData icon;
   final double size;
-  final VoidCallback onPress;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    var appColors = AppColors;
     return Container(
       decoration: BoxDecoration(
         color: color,
@@ -35,7 +34,7 @@ class GlowingActionButton extends StatelessWidget {
           color: color,
           child: InkWell(
             splashColor: AppColors.cardLight,
-            onTap: onPress,
+            onTap: onPressed,
             child: SizedBox(
               width: size,
               height: size,

@@ -1,26 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/helpers.dart';
+import 'package:flutter_chat_app/app.dart';
 import 'package:flutter_chat_app/pages/calls_page.dart';
 import 'package:flutter_chat_app/pages/contacts_page.dart';
-import 'package:flutter_chat_app/pages/message_page.dart';
+import 'package:flutter_chat_app/pages/messages_page.dart';
 import 'package:flutter_chat_app/pages/notifications_page.dart';
+import 'package:flutter_chat_app/screens/screens.dart';
 import 'package:flutter_chat_app/theme.dart';
-import 'package:flutter_chat_app/widgets/glowing_action_button.dart';
 
 import '../widgets/widgets.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key}) : super(key: key);
 
   final ValueNotifier<int> pageIndex = ValueNotifier(0);
   final ValueNotifier<String> title = ValueNotifier('Messages');
 
   final pages = const [
-    MessagePage(),
-    NotificationPage(),
+    MessagesPage(),
+    NotificationsPage(),
     CallsPage(),
-    ContactPage(),
+    ContactsPage(),
   ];
 
   final pageTitles = const [
@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
               value,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 17,
               ),
             );
           },
@@ -67,7 +67,15 @@ class HomePage extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 24.0),
-            child: Avatar.small(url: Helpers.randomPictureUrl()),
+            child: Hero(
+              tag: 'hero-profile-picture',
+              child: Avatar.small(
+                url: context.currentUserImage,
+                onTap: () {
+                  Navigator.of(context).push(ProfileScreen.route);
+                },
+              ),
+            ),
           ),
         ],
       ),
@@ -93,11 +101,12 @@ class _BottomNavigationBar extends StatefulWidget {
   final ValueChanged<int> onItemSelected;
 
   @override
-  State<_BottomNavigationBar> createState() => _BottomNavigationBarState();
+  __BottomNavigationBarState createState() => __BottomNavigationBarState();
 }
 
-class _BottomNavigationBarState extends State<_BottomNavigationBar> {
+class __BottomNavigationBarState extends State<_BottomNavigationBar> {
   var selectedIndex = 0;
+
   void handleItemSelected(int index) {
     setState(() {
       selectedIndex = index;
@@ -122,14 +131,14 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
             children: [
               _NavigationBarItem(
                 index: 0,
-                label: 'Messages',
+                lable: 'Messages',
                 icon: CupertinoIcons.bubble_left_bubble_right_fill,
                 isSelected: (selectedIndex == 0),
                 onTap: handleItemSelected,
               ),
               _NavigationBarItem(
                 index: 1,
-                label: 'Notifications',
+                lable: 'Notifications',
                 icon: CupertinoIcons.bell_solid,
                 isSelected: (selectedIndex == 1),
                 onTap: handleItemSelected,
@@ -137,20 +146,31 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: GlowingActionButton(
-                    color: AppColors.secondary,
-                    icon: CupertinoIcons.add,
-                    onPress: () {}),
+                  color: AppColors.secondary,
+                  icon: CupertinoIcons.add,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const Dialog(
+                        child: AspectRatio(
+                          aspectRatio: 8 / 7,
+                          child: ContactsPage(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
               _NavigationBarItem(
                 index: 2,
-                label: 'Calls',
+                lable: 'Calls',
                 icon: CupertinoIcons.phone_fill,
                 isSelected: (selectedIndex == 2),
                 onTap: handleItemSelected,
               ),
               _NavigationBarItem(
                 index: 3,
-                label: 'Contacts',
+                lable: 'Contacts',
                 icon: CupertinoIcons.person_2_fill,
                 isSelected: (selectedIndex == 3),
                 onTap: handleItemSelected,
@@ -167,14 +187,14 @@ class _NavigationBarItem extends StatelessWidget {
   const _NavigationBarItem({
     Key? key,
     required this.index,
-    required this.label,
+    required this.lable,
     required this.icon,
     this.isSelected = false,
     required this.onTap,
   }) : super(key: key);
 
   final int index;
-  final String label;
+  final String lable;
   final IconData icon;
   final bool isSelected;
   final ValueChanged<int> onTap;
@@ -187,20 +207,20 @@ class _NavigationBarItem extends StatelessWidget {
         onTap(index);
       },
       child: SizedBox(
-        height: 70,
+        width: 70,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              size: 20,
+              size: 22,
               color: isSelected ? AppColors.secondary : null,
             ),
             const SizedBox(
               height: 8,
             ),
             Text(
-              label,
+              lable,
               style: isSelected
                   ? const TextStyle(
                       fontSize: 11,
